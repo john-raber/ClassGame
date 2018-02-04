@@ -1,0 +1,533 @@
+from sys import exit
+
+
+class Character(object):
+
+    def __init__(self, character_health, character_weapon, character_armor, character_inventory):
+        self.character_health = character_health
+        self.character_weapon = character_weapon
+        self.character_armor = character_armor
+        self.character_inventory = character_inventory
+
+class MasterInventory(object):
+
+    inventory_items = {'coors light': 0,
+                       'thing': 1,
+                       'stuff': 2,
+    }
+
+class SheriffTy(Character):
+
+    character_health = 100
+    character_weapon = 'gun'
+    character_armor = 500
+    character_inventory = ['crackers', 'stuff', 'third', 'coors light']
+
+class Brewer(Character):
+
+    character_health = 100
+    character_weapon = 'gun'
+    character_armor = 50
+    character_inventory = []
+
+class Cay(Character):
+
+    character_health = 100
+    character_weapon = 'gun'
+    character_armor = 50
+    character_inventory = []
+
+class Mott(Character):
+
+    character_health = 100
+    character_weapon = 'Mott_gun'
+    character_armor = 50
+    character_inventory = []
+
+class JP(Character):
+
+    character_health = 100
+    character_weapon = 'JP_gun'i
+    character_armor = 50
+    character_inventory = []
+
+class WhereGreg(Character):
+
+    character_health = 100
+    character_weapon = 'gun'
+    character_armor = 150
+    character_inventory = []
+
+class Duel(object):
+
+    def fight(self):
+        print("This duel is not playable.")
+        print("Setup subclasses and initiate fight().")
+        exit(1)
+
+class Death(Duel):
+
+    pass
+
+class Finished(Duel):
+
+    def fight(self):
+        print("You have successfully put the Rat Gang behind bars! Nice Job!")
+        exit(1)
+
+class Saloon(Duel):
+
+    def fight(self):
+        print("Intro")
+        SheriffTy.character_armor = 500
+        SheriffTy.character_health = 100
+
+        while SheriffTy.character_health > 0:
+
+            rr_action = input(">> ")
+
+            if rr_action == "shoot":
+
+                if Brewer.character_armor > 0 and SheriffTy.character_armor > 0:
+                    Brewer.character_armor -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"Brewer's armor is now at {Brewer.character_armor}.")
+                    SheriffTy.character_armor -= Weapons.gun_damage.get(Brewer.character_weapon)
+                    print(f"Sheriff Ty's armor is now at {SheriffTy.character_armor}.")
+
+                    if Brewer.character_armor < 0 and SheriffTy.character_armor < 0:
+                        Brewer.character_health -= (0 - Brewer.character_armor)
+                        print(f"Brewer's health is now at {Brewer.character_health}.")
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    elif Brewer.character_armor < 0 and SheriffTy.character_armor > 0:
+                        Brewer.character_health -= (0 - Brewer.character_armor)
+                        print(f"Brewer's health is now at {Brewer.character_health}.")
+                    elif Brewer.character_armor > 0 and SheriffTy.character_armor < 0:
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    else:
+                        continue
+
+                elif Brewer.character_armor > 0 and SheriffTy.character_armor <= 0:
+                    Brewer.character_armor -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"Brewer's armor is now at {Brewer.character_armor}.")
+                    SheriffTy.character_health -= Weapons.gun_damage.get(Brewer.character_weapon)
+                    print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+
+                    if SheriffTy.character_health < 0:
+                        return 'dead'
+                    elif Brewer.character_armor < 0:
+                        Brewer.character_health -= (0 - Brewer.character_armor)
+                        print(f"Brewer's health is now at {Brewer.character_health}.")
+                    else:
+                        continue
+
+                elif Brewer.character_armor <= 0 and SheriffTy.character_armor > 0:
+                    Brewer.character_health -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"Brewer's health is now at {Brewer.character_health}.")
+                    SheriffTy.character_armor -= Weapons.gun_damage.get(Brewer.character_weapon)
+                    print(f"Sheriff Ty's armor is now at {SheriffTy.character_armor}.")
+
+                    if Brewer.character_health < 0:
+                        print("Victory")
+                        return 'hideout'
+                    elif SheriffTy.character_armor < 0:
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    else:
+                        continue
+
+                else:
+                    Brewer.character_health -= (0 - Brewer.character_armor)
+                    print(f"Brewer's health is now at {Brewer.character_health}.")
+                    SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                    print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+
+                    if Brewer.character_health < 0 and SheriffTy.character_health < 0:
+                        return 'dead'
+                    elif Brewer.character_health < 0 and SheriffTy.character_health > 0:
+                        print("Victory")
+                        return 'hideout'
+                    elif Brewer.character_health > 0 and SheriffTy.character_health <0:
+                        return 'dead'
+
+            elif rr_action == "laugh at Brewer":
+                return 'death'
+            elif rr_action == "buy a beer":
+                SheriffTy.character_inventory[MasterInventory.inventory_items.get('coors light')] = 'coors light'
+                print("The bartender gives you a coors light.")
+                print(f"You now have {' - '.join(SheriffTy.character_inventory)} in your inventory.")
+            else:
+                continue
+
+class Railroad(Duel):
+
+    print("Intro - Rat Gang & Mott")
+    print("Intro - Combat")
+
+    def fight(self):
+        while SheriffTy.character_health > 0:
+
+            rr_action = input(">> ")
+
+            if rr_action == "shoot":
+
+                if Mott.character_armor > 0 and SheriffTy.character_armor > 0:
+                    Mott.character_armor -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"Mott's armor is now at {Mott.character_armor}.")
+                    SheriffTy.character_armor -= Weapons.gun_damage.get(Mott.character_weapon)
+                    print(f"Sheriff Ty's armor is now at {SheriffTy.character_armor}.")
+
+                    if Mott.character_armor < 0 and SheriffTy.character_armor < 0:
+                        Mott.character_health -= (0 - Mott.character_armor)
+                        print(f"Mott's health is now at {Mott.character_health}.")
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    elif Mott.character_armor < 0 and SheriffTy.character_armor > 0:
+                        Mott.character_health -= (0 - Mott.character_armor)
+                        print(f"Mott's health is now at {Mott.character_health}.")
+                    elif Mott.character_armor > 0 and SheriffTy.character_armor < 0:
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    else:
+                        continue
+
+                elif Mott.character_armor > 0 and SheriffTy.character_armor <= 0:
+                    Mott.character_armor -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"Mott's armor is now at {Mott.character_armor}.")
+                    SheriffTy.character_health -= Weapons.gun_damage.get(Mott.character_weapon)
+                    print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+
+                    if SheriffTy.character_health < 0:
+                        return 'dead'
+                    elif Mott.character_armor < 0:
+                        Mott.character_health -= (0 - Mott.character_armor)
+                        print(f"Mott's health is now at {Mott.character_health}.")
+                    else:
+                        continue
+
+                elif Mott.character_armor <= 0 and SheriffTy.character_armor > 0:
+                    Mott.character_health -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"Mott's health is now at {Mott.character_health}.")
+                    SheriffTy.character_armor -= Weapons.gun_damage.get(Mott.character_weapon)
+                    print(f"Sheriff Ty's armor is now at {SheriffTy.character_armor}.")
+
+                    if Mott.character_health < 0:
+                        print("Victory")
+                        return 'warehouse'
+                    elif SheriffTy.character_armor < 0:
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    else:
+                        continue
+
+                else:
+                    Mott.character_health -= (0 - Mott.character_armor)
+                    print(f"Mott's health is now at {Mott.character_health}.")
+                    SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                    print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+
+                    if Mott.character_health < 0 and SheriffTy.character_health < 0:
+                        return 'dead'
+                    elif Mott.character_health < 0 and SheriffTy.character_health > 0:
+                        print("Victory")
+                        return 'warehouse'
+                    elif Mott.character_health > 0 and SheriffTy.character_health <0:
+                        return 'dead'
+
+            elif rr_action == "laugh at Mott":
+                return 'death'
+            else:
+                continue
+
+class Hideout(Duel):
+
+    def fight(self):
+        print("Intro")
+        SheriffTy.character_armor = 500
+        SheriffTy.character_health = 100
+
+        while SheriffTy.character_health > 0:
+
+            rr_action = input(">> ")
+
+            if rr_action == "shoot":
+
+                if Cay.character_armor > 0 and SheriffTy.character_armor > 0:
+                    Cay.character_armor -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"Cay's armor is now at {Cay.character_armor}.")
+                    SheriffTy.character_armor -= Weapons.gun_damage.get(Cay.character_weapon)
+                    print(f"Sheriff Ty's armor is now at {SheriffTy.character_armor}.")
+
+                    if Cay.character_armor < 0 and SheriffTy.character_armor < 0:
+                        Cay.character_health -= (0 - Cay.character_armor)
+                        print(f"Cay's health is now at {Cay.character_health}.")
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    elif Cay.character_armor < 0 and SheriffTy.character_armor > 0:
+                        Cay.character_health -= (0 - Cay.character_armor)
+                        print(f"Brewer's health is now at {Brewer.character_health}.")
+                    elif Cay.character_armor > 0 and SheriffTy.character_armor < 0:
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    else:
+                        continue
+
+                elif Cay.character_armor > 0 and SheriffTy.character_armor <= 0:
+                    Cay.character_armor -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"Cay's armor is now at {Cay.character_armor}.")
+                    SheriffTy.character_health -= Weapons.gun_damage.get(Cay.character_weapon)
+                    print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+
+                    if SheriffTy.character_health < 0:
+                        return 'dead'
+                    elif Cay.character_armor < 0:
+                        Cay.character_health -= (0 - Cay.character_armor)
+                        print(f"Cay's health is now at {Cay.character_health}.")
+                    else:
+                        continue
+
+                elif Cay.character_armor <= 0 and SheriffTy.character_armor > 0:
+                    Cay.character_health -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"Cay's health is now at {Cay.character_health}.")
+                    SheriffTy.character_armor -= Weapons.gun_damage.get(Cay.character_weapon)
+                    print(f"Sheriff Ty's armor is now at {SheriffTy.character_armor}.")
+
+                    if Cay.character_health < 0:
+                        print("Victory")
+                        return 'labyrinth'
+                    elif SheriffTy.character_armor < 0:
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    else:
+                        continue
+
+                else:
+                    Cay.character_health -= (0 - Cay.character_armor)
+                    print(f"Cay's health is now at {Cay.character_health}.")
+                    SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                    print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+
+                    if Cay.character_health < 0 and SheriffTy.character_health < 0:
+                        return 'dead'
+                    elif Cay.character_health < 0 and SheriffTy.character_health > 0:
+                        print("Victory")
+                        return 'labyrinth'
+                    elif Cay.character_health > 0 and SheriffTy.character_health <0:
+                        return 'dead'
+
+            elif rr_action == "laugh at Cay":
+                return 'death'
+            else:
+                continue
+
+class Warehouse(Duel):
+
+    def fight(self):
+        print("Intro")
+        SheriffTy.character_armor = 500
+        SheriffTy.character_health = 100
+
+        while SheriffTy.character_health > 0:
+
+            rr_action = input(">> ")
+
+            if rr_action == "shoot":
+
+                if JP.character_armor > 0 and SheriffTy.character_armor > 0:
+                    JP.character_armor -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"JP's armor is now at {JP.character_armor}.")
+                    SheriffTy.character_armor -= Weapons.gun_damage.get(JP.character_weapon)
+                    print(f"Sheriff Ty's armor is now at {SheriffTy.character_armor}.")
+
+                    if JP.character_armor < 0 and SheriffTy.character_armor < 0:
+                        JP.character_health -= (0 - JP.character_armor)
+                        print(f"JP's health is now at {JP.character_health}.")
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    elif JP.character_armor < 0 and SheriffTy.character_armor > 0:
+                        JP.character_health -= (0 - JP.character_armor)
+                        print(f"JP's health is now at {JP.character_health}.")
+                    elif JP.character_armor > 0 and SheriffTy.character_armor < 0:
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    else:
+                        continue
+
+                elif JP.character_armor > 0 and SheriffTy.character_armor <= 0:
+                    JP.character_armor -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"JP's armor is now at {JP.character_armor}.")
+                    SheriffTy.character_health -= Weapons.gun_damage.get(JP.character_weapon)
+                    print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+
+                    if SheriffTy.character_health < 0:
+                        return 'dead'
+                    elif JP.character_armor < 0:
+                        JP.character_health -= (0 - JP.character_armor)
+                        print(f"JP's health is now at {JP.character_health}.")
+                    else:
+                        continue
+
+                elif JP.character_armor <= 0 and SheriffTy.character_armor > 0:
+                    JP.character_health -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"JP's health is now at {JP.character_health}.")
+                    SheriffTy.character_armor -= Weapons.gun_damage.get(JP.character_weapon)
+                    print(f"Sheriff Ty's armor is now at {SheriffTy.character_armor}.")
+
+                    if JP.character_health < 0:
+                        print("Victory")
+                        return 'saloon'
+                    elif SheriffTy.character_armor < 0:
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    else:
+                        continue
+
+                else:
+                    JP.character_health -= (0 - JP.character_armor)
+                    print(f"JP's health is now at {JP.character_health}.")
+                    SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                    print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+
+                    if JP.character_health < 0 and SheriffTy.character_health < 0:
+                        return 'dead'
+                    elif JP.character_health < 0 and SheriffTy.character_health > 0:
+                        print("Victory")
+                        return 'saloon'
+                    elif JP.character_health > 0 and SheriffTy.character_health <0:
+                        return 'dead'
+
+            elif rr_action == "laugh at JP":
+                return 'death'
+            else:
+                continue
+
+class Labyrinth(Duel):
+
+    def fight(self):
+        print("Intro - Labyrinth - WhereGreg")
+        SheriffTy.character_armor = 500
+        SheriffTy.character_health = 100
+
+        while SheriffTy.character_health > 0:
+
+            rr_action = input(">> ")
+
+            if rr_action == "shoot":
+
+                if WhereGreg.character_armor > 0 and SheriffTy.character_armor > 0:
+                    WhereGreg.character_armor -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"WhereGreg's armor is now at {WhereGreg.character_armor}.")
+                    SheriffTy.character_armor -= Weapons.gun_damage.get(WhereGreg.character_weapon)
+                    print(f"Sheriff Ty's armor is now at {SheriffTy.character_armor}.")
+
+                    if WhereGreg.character_armor < 0 and SheriffTy.character_armor < 0:
+                        WhereGreg.character_health -= (0 - WhereGreg.character_armor)
+                        print(f"WhereGreg's health is now at {WhereGreg.character_health}.")
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    elif WhereGreg.character_armor < 0 and SheriffTy.character_armor > 0:
+                        WhereGreg.character_health -= (0 - WhereGreg.character_armor)
+                        print(f"WhereGreg's health is now at {WhereGreg.character_health}.")
+                    elif WhereGreg.character_armor > 0 and SheriffTy.character_armor < 0:
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    else:
+                        continue
+
+                elif WhereGreg.character_armor > 0 and SheriffTy.character_armor <= 0:
+                    WhereGreg.character_armor -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"WhereGreg's armor is now at {WhereGreg.character_armor}.")
+                    SheriffTy.character_health -= Weapons.gun_damage.get(WhereGreg.character_weapon)
+                    print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+
+                    if SheriffTy.character_health < 0:
+                        return 'dead'
+                    elif WhereGreg.character_armor < 0:
+                        WhereGreg.character_health -= (0 - WhereGreg.character_armor)
+                        print(f"WhereGreg's health is now at {WhereGreg.character_health}.")
+                    else:
+                        continue
+
+                elif WhereGreg.character_armor <= 0 and SheriffTy.character_armor > 0:
+                    WhereGreg.character_health -= Weapons.gun_damage.get(SheriffTy.character_weapon)
+                    print(f"WhereGreg's health is now at {WhereGreg.character_health}.")
+                    SheriffTy.character_armor -= Weapons.gun_damage.get(WhereGreg.character_weapon)
+                    print(f"Sheriff Ty's armor is now at {SheriffTy.character_armor}.")
+
+                    if WhereGreg.character_health < 0:
+                        print("Victory")
+                        return 'finished'
+                    elif SheriffTy.character_armor < 0:
+                        SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                        print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+                    else:
+                        continue
+
+                else:
+                    WhereGreg.character_health -= (0 - WhereGreg.character_armor)
+                    print(f"WhereGreg's health is now at {WhereGreg.character_health}.")
+                    SheriffTy.character_health -= (0 - SheriffTy.character_armor)
+                    print(f"Sheriff Ty's health is now at {SheriffTy.character_health}.")
+
+                    if WhereGreg.character_health < 0 and SheriffTy.character_health < 0:
+                        return 'dead'
+                    elif WhereGreg.character_health < 0 and SheriffTy.character_health > 0:
+                        print("Victory")
+                        return 'finished'
+                    elif WhereGreg.character_health > 0 and SheriffTy.character_health <0:
+                        return 'dead'
+
+            elif rr_action == "laugh at WhereGreg":
+                return 'death'
+            elif rr_action == "give WhereGreg a beer":
+            else:
+                continue
+
+class Engine(object):
+
+    def __init__(self, duel_path):
+        self.duel_path = duel_path
+
+    def play(self):
+        current_duel = self.duel_path.opening_duel()
+        last_duel = self.duel_path.next_duel('finished')
+
+        while current_duel != last_duel:
+            next_duel_name = current_duel.fight()
+            current_duel = self.duel_path.next_duel(next_duel_name)
+
+        current_duel.fight()
+
+class Map(object):
+
+    duels = {'saloon': Saloon(),
+             'railroad': Railroad(),
+             'hideout': Hideout(),
+             'warehouse': Warehouse(),
+             'labyrinth': Labyrinth(),
+             'death': Death(),
+             'finished': Finished(),
+             }
+
+    def __init__(self, duel_start):
+        self.duel_start = duel_start
+
+    def next_duel(self, duel_name):
+        nd = Map.duels.get(duel_name)
+        return nd
+
+    def opening_duel(self):
+        return self.next_duel(self.duel_start)
+
+class Weapons(object):
+
+    gun_damage = {'gun': 45,
+                  'Mott_gun': 125,
+                  'JP_gun': 75,
+                  'wheregreg_gun_rage': 550
+                  }
+
+a_duel = Map('hideout')
+rat_gang = Engine(a_duel)
+rat_gang.play()
